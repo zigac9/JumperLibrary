@@ -1,0 +1,12 @@
+D:\FRI_Ljubljana\GitHub\JumperLibrary\bin\Debug\net6.0-windows\JumperLibrary.deps.json
+D:\FRI_Ljubljana\GitHub\JumperLibrary\bin\Debug\net6.0-windows\JumperLibrary.dll
+D:\FRI_Ljubljana\GitHub\JumperLibrary\bin\Debug\net6.0-windows\JumperLibrary.pdb
+D:\FRI_Ljubljana\GitHub\JumperLibrary\obj\Debug\net6.0-windows\JumperLibrary.csproj.AssemblyReference.cache
+D:\FRI_Ljubljana\GitHub\JumperLibrary\obj\Debug\net6.0-windows\JumperLibrary.GeneratedMSBuildEditorConfig.editorconfig
+D:\FRI_Ljubljana\GitHub\JumperLibrary\obj\Debug\net6.0-windows\JumperLibrary.AssemblyInfoInputs.cache
+D:\FRI_Ljubljana\GitHub\JumperLibrary\obj\Debug\net6.0-windows\JumperLibrary.AssemblyInfo.cs
+D:\FRI_Ljubljana\GitHub\JumperLibrary\obj\Debug\net6.0-windows\JumperLibrary.csproj.CoreCompileInputs.cache
+D:\FRI_Ljubljana\GitHub\JumperLibrary\obj\Debug\net6.0-windows\JumperLibrary.dll
+D:\FRI_Ljubljana\GitHub\JumperLibrary\obj\Debug\net6.0-windows\refint\JumperLibrary.dll
+D:\FRI_Ljubljana\GitHub\JumperLibrary\obj\Debug\net6.0-windows\JumperLibrary.pdb
+D:\FRI_Ljubljana\GitHub\JumperLibrary\obj\Debug\net6.0-windows\ref\JumperLibrary.dll
