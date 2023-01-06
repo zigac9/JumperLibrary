@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -11,6 +12,7 @@ namespace JumperLibrary;
 public class MovingEnemy
 {
     private readonly List<Texture2D> _enemyList;
+    private readonly List<Texture2D> _bossList;
     private Vector2 _bullFirePosition;
     private bool _drawFire;
 
@@ -22,6 +24,7 @@ public class MovingEnemy
     {
         TextureRand = 0;
         _enemyList = new List<Texture2D> { textures["assets/tri"], textures["assets/stiri"], textures["assets/pet"] };
+        _bossList = new List<Texture2D> { textures["assets/dva"], textures["assets/sest"] };
         GetAnimatedSprite = new AnimatedSprite(spriteSheets["assets/fire.sf"]);
         Initialize();
     }
@@ -51,6 +54,8 @@ public class MovingEnemy
     public int MaxLife { get; set; }
     
     public int Life { get; set; }
+    
+    public bool NotDie { get; set; }
 
     public void Initialize()
     {
@@ -58,7 +63,7 @@ public class MovingEnemy
         _drawFire = false;
         Degree = 0;
         //TODO popravi ko bo za konc
-        Start = 200;
+        Start = 100;
         End = 1500;
         View = 500;
         Step = 1000;
@@ -67,11 +72,22 @@ public class MovingEnemy
         Visible = false;
         MaxLife = 2;
         Life = MaxLife;
+        NotDie = false;
     }
 
     public void Draw(SpriteBatch s)
     {
-        s.Draw(_enemyList[TextureRand], _position, null, Color.White, 0f, Vector2.Zero,
+        List<Texture2D> active = new List<Texture2D>();
+        if (NotDie)
+        {
+            active = _bossList;
+        }
+        else
+        {
+            active = _enemyList;
+        }
+
+        s.Draw(active[TextureRand], _position, null, Color.White, 0f, Vector2.Zero,
             _speed.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 
         if (_drawFire)
@@ -85,6 +101,10 @@ public class MovingEnemy
             _speed.X *= -1;
         if (_position.X < 10)
             _speed.X *= -1;
+        if (_speed.X < -3)
+            _speed = new Vector2(-3, 0);
+        else if (_speed.X > 3)
+            _speed = new Vector2(3, 0);
     }
 
     public void Update(Bullet bullet, Bullet bulletEnemy, Sound sound, Player player,
@@ -92,11 +112,23 @@ public class MovingEnemy
     {
         if (Life > 0 && BulletCloseCollision(bullet) && Visible)
         {
-            bullet.IsCheck = false;
-            GetAnimatedSprite.Play("fire");
-            _drawFire = true;
-            _bullFirePosition = new Vector2(bullet.Position.X, bullet.Position.Y);
-            Life--;
+            Debug.WriteLine(Life);
+            if (!NotDie)
+            {
+                if (_speed.X < 0)
+                    _speed = new Vector2(-40, 0);
+                else if (_speed.X > 0)
+                    _speed = new Vector2(40, 0);
+                Move();
+            }
+            else
+            {
+                bullet.IsCheck = false;
+                GetAnimatedSprite.Play("fire");
+                _drawFire = true;
+                _bullFirePosition = new Vector2(bullet.Position.X, bullet.Position.Y);
+                Life--;
+            }
         }
         else
         {
@@ -168,7 +200,7 @@ public class MovingEnemy
         if (bullet.Position.X > _position.X - 30 &&
             bullet.Position.X + bullet.Position.Width < _position.X + _position.Width + 30 &&
             bullet.Position.Y > _position.Y &&
-            bullet.Position.Y + bullet.Position.Height < _position.Y + _position.Height + 50) return true;
+            bullet.Position.Y < _position.Y + _position.Height + 50) return true;
         return false;
     }
 }

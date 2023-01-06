@@ -63,7 +63,9 @@ public class Bullet
 
     public bool BulletCollision(Bullet bullet)
     {
-        var distance = Vector2.Distance(new Vector2(_position.X, _position.Y), new Vector2(bullet._position.X, bullet.Position.Y));
+        if (!IsCheck || !bullet.IsCheck) return false;
+        var distance = Vector2.Distance(new Vector2(_position.X, _position.Y),
+            new Vector2(bullet._position.X, bullet.Position.Y));
         return distance <= Radius + bullet.Radius;
     }
 }
