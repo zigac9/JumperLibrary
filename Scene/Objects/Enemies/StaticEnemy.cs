@@ -48,27 +48,15 @@ public class StaticEnemy
     private int Collision(Player player)
     {
         //enemy dead
-        if (_position.Y - player.PlayerPosition.Y - 45 < 5 && _position.Y - player.PlayerPosition.Y - 45 > -15 &&
-            player.Speed.Y > 0 &&
-            ((player.PlayerPosition.X + 15 > _position.X &&
-              player.PlayerPosition.X + 15 < _position.X + player.PlayerPosition.Width) ||
-             (player.PlayerPosition.X + 45 > _position.X &&
-              player.PlayerPosition.X + 45 < _position.X + player.PlayerPosition.Width)))
+        if (player.PlayerPosition.Bottom > _position.Top && player.PlayerPosition.Top < _position.Top &&
+            player.PlayerPosition.Left < _position.Right && player.PlayerPosition.Right > _position.Left && player.Speed.Y > 0)
         {
             return 0;
         }
-
-        //player dead
-        if ((_position.Y - player.PlayerPosition.Y < 5 && _position.Y - player.PlayerPosition.Y > -35 &&
-             player.Speed.Y < 0 &&
-             ((player.PlayerPosition.X > _position.X &&
-               player.PlayerPosition.X + 15 < _position.X + player.PlayerPosition.Height) ||
-              (player.PlayerPosition.X + 45 > _position.X &&
-               player.PlayerPosition.X + 45 < _position.X + player.PlayerPosition.Height))) )
-            // ||
-            // (_position.Intersects(player.PlayerPosition) || player.PlayerPosition.Intersects(_position)))
+        if (player.PlayerPosition.Intersects(_position) || _position.Intersects(player.PlayerPosition) && player.Speed.Y > 0)
         {
             return 1;
+
         }
         return 2;
     }
