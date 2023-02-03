@@ -90,7 +90,7 @@ public class StaticEnemy
             StRand = -1;
         }
         else if (Collision(player) == 1 && !gameOver &&
-                 thingsCollisionCheck)
+                 thingsCollisionCheck && collisionCheck)
         {
             Debug.WriteLine(player.Speed.ToString());
             player.Speed = new Vector2(player.Speed.X, 0);

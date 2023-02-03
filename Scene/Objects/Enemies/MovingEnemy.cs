@@ -63,7 +63,7 @@ public class MovingEnemy
         _drawFire = false;
         Degree = 0;
         //TODO popravi ko bo za konc
-        Start = 100;
+        Start = 500;
         End = 1500;
         View = 500;
         Step = 1000;
@@ -96,15 +96,18 @@ public class MovingEnemy
 
     public void Move()
     {
+        //Debug.WriteLine("Speed:" + _speed);
         _position.X += (int)_speed.X;
-        if (_position.X > 410)
-            _speed.X *= -1;
-        if (_position.X < 10)
-            _speed.X *= -1;
         if (_speed.X < -3)
             _speed = new Vector2(-3, 0);
         else if (_speed.X > 3)
             _speed = new Vector2(3, 0);
+        if (_position.X > 410)
+            _speed.X *= -1;
+        if (_position.X < 10)
+            _speed.X *= -1;
+        // Debug.WriteLine("Speed po metodi:" + _speed);
+
     }
 
     public void Update(Bullet bullet, Bullet bulletEnemy, Sound sound, Player player,
@@ -120,6 +123,7 @@ public class MovingEnemy
                 else if (_speed.X > 0)
                     _speed = new Vector2(40, 0);
                 Move();
+                Life--;
             }
             else
             {
@@ -127,7 +131,6 @@ public class MovingEnemy
                 GetAnimatedSprite.Play("fire");
                 _drawFire = true;
                 _bullFirePosition = new Vector2(bullet.Position.X, bullet.Position.Y);
-                Life--;
             }
         }
         else
@@ -136,28 +139,33 @@ public class MovingEnemy
             if (BulletCollision(bullet) && Visible)
             {
                 Visible = false;
+                End = Start + View;
                 Life = MaxLife;
             }
-
-            if (Math.Abs(Position.X - player.PlayerPosition.X) < 10 && Position.Y > 0 && Visible)
-                if (!bulletEnemy.IsCheck)
+            else
+            {
+                if (Math.Abs(Position.X - player.PlayerPosition.X) < 10 && Position.Y > 0 && Visible && collisionCheck)
                 {
-                    Degree =
-                        // ReSharper disable once PossibleLossOfFraction
-                        (float)Math.Atan(-(player.PlayerPosition.Y - 30 - Position.Y) /
-                                         (player.PlayerPosition.X - 30 - Position.X));
-                    bulletEnemy.Position = new Rectangle(Position.X + 30,
-                        Position.Y + 30, bulletEnemy.Position.Width, bulletEnemy.Position.Height);
-                    if (player.PlayerPosition.X < Position.X + 30)
-                        bulletEnemy.Speed = new Vector2(-1 * (float)Math.Cos(Degree), (float)
-                            0.5 * (float)Math.Sin(Degree));
-                    else
-                        bulletEnemy.Speed = new Vector2(1 * (float)Math.Cos(Degree), (float)
-                            0.5 * (float)Math.Sin(Degree));
+                    if (!bulletEnemy.IsCheck)
+                    {
+                        Degree =
+                            // ReSharper disable once PossibleLossOfFraction
+                            (float)Math.Atan(-(player.PlayerPosition.Y - 30 - Position.Y) /
+                                             (player.PlayerPosition.X - 30 - Position.X));
+                        bulletEnemy.Position = new Rectangle(Position.X + 30,
+                            Position.Y + 30, bulletEnemy.Position.Width, bulletEnemy.Position.Height);
+                        if (player.PlayerPosition.X < Position.X + 30)
+                            bulletEnemy.Speed = new Vector2(-1 * (float)Math.Cos(Degree), (float)
+                                0.5 * (float)Math.Sin(Degree));
+                        else
+                            bulletEnemy.Speed = new Vector2(1 * (float)Math.Cos(Degree), (float)
+                                0.5 * (float)Math.Sin(Degree));
 
-                    bulletEnemy.IsCheck = true;
-                    sound.EnemyShoot.Play();
+                        bulletEnemy.IsCheck = true;
+                        sound.EnemyShoot.Play();
+                    }
                 }
+            }
         }
 
         if (bulletEnemy.Position.Y > 740 || bulletEnemy.Position.X is < -20 or > 500 ||
@@ -177,13 +185,6 @@ public class MovingEnemy
         }
     }
 
-    // private bool BulletCollision(Bullet bullet)
-    // {
-    //     if (bullet.IsCheck)
-    //         return bullet.Position.Intersects(_position) || _position.Intersects(bullet.Position);
-    //     return false;
-    // }
-    
     private bool BulletCollision(Bullet bullet)
     {
         var closest = new Vector2(

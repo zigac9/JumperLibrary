@@ -49,7 +49,7 @@ public class Trampo
     {
         spriteBatch.Draw(_textures["assets/toshak"], _position, Color.White);
     }
-
+    
     public bool Collision(Player player, bool collisionCheck)
     {
         if ((player.PlayerPosition.X + 10 > _position.X &&
@@ -59,13 +59,7 @@ public class Trampo
         {
             if (_position.Y + _position.Height - player.PlayerPosition.Y - player.PlayerPosition.Height < 5 &&
                 _position.Y + _position.Height - player.PlayerPosition.Y - player.PlayerPosition.Height > -15 &&
-                player.Speed.Y > 0)
-            {
-                if (collisionCheck)
-                    return true;
-                return false;
-            }
-
+                player.Speed.Y > 0) return collisionCheck;
             return false;
         }
 
