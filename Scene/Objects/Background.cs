@@ -31,6 +31,7 @@ public class Background
         _pauseposize = new Rectangle(0, 0, 480, 720);
         _gameOverposize = new Rectangle(0, 0, 480, 720);
         _hScoreposize = new Rectangle(0, 0, 480, 720);
+        SoundCheck = true;
         Initialize();
     }
 
@@ -75,7 +76,6 @@ public class Background
         _sPosise1 = new Rectangle(0, -2880, 480, 3600);
         _sPosise2 = new Rectangle(0, -6480, 480, 3600);
         _bPosize = new Rectangle(_bPosize.X, -7200 + 720, _bPosize.Width, _bPosize.Height);
-        SoundCheck = true;
         GameStateCheck = true;
     }
 
