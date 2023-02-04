@@ -62,7 +62,7 @@ public class StaticEnemy
     }
 
     public void Update(Bullet bullet, BoardsList boardsList, Sound sound, Player player,
-        ref bool gameOver, ref bool collisionCheck, ScorClass score, bool thingsCollisionCheck, Trampo trampo, Jetpack jetpack, Spring spring)
+        ref bool gameOver, ref bool collisionCheck, ScorClass score, bool thingsCollisionCheck, Trampo trampo, Jetpack jetpack, Spring spring, bool SoundEffectCheck)
     {
         if (score.Score % 430 > 400 && Position.Y > 780)
         {
@@ -95,7 +95,7 @@ public class StaticEnemy
             Debug.WriteLine(player.Speed.ToString());
             player.Speed = new Vector2(player.Speed.X, 0);
             MediaPlayer.Stop();
-            sound.Dead.Play();
+            if (SoundEffectCheck) sound.Dead.Play();
             collisionCheck = false;
             gameOver = true;
         }

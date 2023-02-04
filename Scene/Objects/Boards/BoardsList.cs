@@ -53,7 +53,7 @@ public class BoardsList
         }
     }
 
-    public void Collision(bool thingsCollisionCheck, bool collisionCheck, bool gameOver, Player player, Sound sound)
+    public void Collision(bool thingsCollisionCheck, bool collisionCheck, bool gameOver, Player player, Sound sound, bool SoundEffectCheck)
     {
         if (thingsCollisionCheck)
         {
@@ -61,7 +61,7 @@ public class BoardsList
                 if (board.Visible && board.Collision(player) && !gameOver && collisionCheck)
                 {
                     player.Speed = new Vector2(player.Speed.X, -13);
-                    sound.Board.Play();
+                    if (SoundEffectCheck) sound.Board.Play();
                 }
 
             for (var i = 0; i < MovingBoardList.Length; i++)
@@ -69,7 +69,7 @@ public class BoardsList
                 if (MovingBoardList[i].Collision(player) && !gameOver && collisionCheck)
                 {
                     player.Speed = new Vector2(player.Speed.X, -13);
-                    sound.Board.Play();
+                    if (SoundEffectCheck) sound.Board.Play();
                 }
 
                 if (FakeBoardList[i].Visible && FakeBoardList[i].Collision(player) &&
@@ -80,7 +80,7 @@ public class BoardsList
                     !gameOver && collisionCheck)
                 {
                     player.Speed = new Vector2(player.Speed.X, -13);
-                    sound.Board.Play();
+                    if (SoundEffectCheck) sound.Board.Play();
                     GoneBoardList[i].Visible = false;
                 }
             }

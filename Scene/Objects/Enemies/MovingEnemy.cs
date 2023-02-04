@@ -111,7 +111,7 @@ public class MovingEnemy
     }
 
     public void Update(Bullet bullet, Bullet bulletEnemy, Sound sound, Player player,
-        ClassEnums.GameStateEnum currentGameState, ref bool collisionCheck)
+        ClassEnums.GameStateEnum currentGameState, ref bool collisionCheck, bool SoundEffectCheck)
     {
         if (Life > 0 && BulletCloseCollision(bullet) && Visible)
         {
@@ -162,7 +162,7 @@ public class MovingEnemy
                                 0.5 * (float)Math.Sin(Degree));
 
                         bulletEnemy.IsCheck = true;
-                        sound.EnemyShoot.Play();
+                        if (SoundEffectCheck) sound.EnemyShoot.Play();
                     }
                 }
             }
@@ -178,7 +178,7 @@ public class MovingEnemy
         {
             player.Speed = new Vector2(player.Speed.X, 0);
             MediaPlayer.Stop();
-            sound.Dead.Play();
+            if (SoundEffectCheck) sound.Dead.Play();
             bulletEnemy.IsCheck = false;
             collisionCheck = false;
             Life = MaxLife;

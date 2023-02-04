@@ -16,6 +16,8 @@ public class Background
     private readonly Rectangle _pauseposize;
     private readonly Rectangle _sOffposize;
     private readonly Rectangle _sOnposize;
+    private readonly Rectangle _sOffposizeMusic;
+    private readonly Rectangle _sOnposizeMusic;
     private Rectangle _sPosise1;
     private Rectangle _sPosise2;
     private readonly Dictionary<string, Texture2D> _textures;
@@ -25,13 +27,16 @@ public class Background
         _textures = textures;
         _introMenuposize = new Rectangle(0, 0, 480, 720);
         _optionposize = new Rectangle(0, 0, 480, 720);
-        _sOnposize = new Rectangle(85, 400, 200, 60);
-        _sOffposize = new Rectangle(85, 400, 200, 60);
+        _sOnposize = new Rectangle(150, 360, 200, 60);
+        _sOffposize = new Rectangle(150, 360, 200, 60);
+        _sOnposizeMusic = new Rectangle(150, 480, 200, 60);
+        _sOffposizeMusic = new Rectangle(150, 480, 200, 60);
         _notifposize = new Rectangle(0, 0, 480, 60);
         _pauseposize = new Rectangle(0, 0, 480, 720);
         _gameOverposize = new Rectangle(0, 0, 480, 720);
         _hScoreposize = new Rectangle(0, 0, 480, 720);
         SoundCheck = true;
+        SoundEffectCheck = true;
         Initialize();
     }
 
@@ -54,6 +59,8 @@ public class Background
     }
 
     public bool SoundCheck { get; set; }
+    
+    public bool SoundEffectCheck { get; set; }
 
     public bool GameStateCheck { get; set; }
 
@@ -96,6 +103,12 @@ public class Background
                 s.Draw(_textures["assets/sOn"], _sOnposize, Color.White);
             else
                 s.Draw(_textures["assets/sOff"], _sOffposize, Color.White);
+            
+            if(SoundEffectCheck)    
+                s.Draw(_textures["assets/sOn"], _sOnposizeMusic, Color.White);
+            else
+                s.Draw(_textures["assets/sOff"], _sOffposizeMusic, Color.White);
+
         }
 
         if (gameState == ClassEnums.GameStateEnum.GameOver)
