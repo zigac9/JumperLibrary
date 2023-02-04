@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Text;
 using System;
+using MonoGame.Extended;
 
 namespace JumperLibrary
 {
@@ -74,8 +75,13 @@ namespace JumperLibrary
                         hasFocus = !hasFocus;
                         finishedWriting = true;
 
+                        borderColor = Color.Green;
+
                         if (prevHasFocus != hasFocus && !hasFocus)
+                        {
+                            borderColor = Color.Black;
                             finishedWriting = true;
+                        }
                     }
                     else if (hasFocus && text.Length < textLengthCap) // If user can add more characters
                     {
