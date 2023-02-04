@@ -17,13 +17,20 @@ namespace JumperLibrary
             GameOver,
             HScore,
             HScoreHard,
-            InputName
+            InputName,
+            About
         }
 
         public enum PlayerOrientEnum
         {
             Left = 1,
             Right
+        }
+
+        public enum GameModeEnum
+        {
+            Easy = 0,
+            Hard
         }
     }
 }

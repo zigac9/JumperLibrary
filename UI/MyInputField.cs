@@ -154,7 +154,7 @@ public class MyInputField
 
     public void DrawName(SpriteBatch sp)
     {
-        sp.DrawString(font, "Hello " + text.ToString(), new Vector2(100,100), Color.Black, 0f, new Vector2(0, 0), new Vector2(1, 1),
+        sp.DrawString(font, "Hello " + text.ToString(), new Vector2(30,675), Color.Black, 0f, new Vector2(0, 0), new Vector2(1, 1),
                 SpriteEffects.None, 0f);
     }
 

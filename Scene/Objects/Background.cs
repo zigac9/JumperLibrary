@@ -20,6 +20,8 @@ public class Background
     private readonly Rectangle _sOnposizeMusic;
     private Rectangle _sPosise1;
     private Rectangle _sPosise2;
+    private Rectangle _gameModeEasyPos;
+    private Rectangle _gameModeHardPos;
     private readonly Dictionary<string, Texture2D> _textures;
 
     public Background(Dictionary<string, Texture2D> textures)
@@ -35,6 +37,8 @@ public class Background
         _pauseposize = new Rectangle(0, 0, 480, 720);
         _gameOverposize = new Rectangle(0, 0, 480, 720);
         _hScoreposize = new Rectangle(0, 0, 480, 720);
+        _gameModeEasyPos = new Rectangle(200, 285, 220, 60);
+        _gameModeHardPos = new Rectangle(200, 285, 220, 60);
         SoundCheck = true;
         SoundEffectCheck = true;
         Initialize();
@@ -98,7 +102,7 @@ public class Background
         GameStateCheck = true;
     }
 
-    public void Draw(SpriteBatch s, ClassEnums.GameStateEnum gameState, ScorClass score)
+    public void Draw(SpriteBatch s, ClassEnums.GameStateEnum gameState, ScorClass score, ClassEnums.GameModeEnum gameModeEnum)
     {
         if (gameState == ClassEnums.GameStateEnum.InputName)
         {
@@ -106,12 +110,25 @@ public class Background
         }
         else
         {
-            s.Draw(_textures["assets/gradient"], _bPosize, Color.White);
-            s.Draw(_textures["assets/kooh"], _kPosize, Color.White);
-            s.Draw(_textures["assets/sides"], _sPosise1, Color.White);
-            s.Draw(_textures["assets/sides"], _sPosise2, Color.White);
             if (gameState == ClassEnums.GameStateEnum.IntroMenu)
+            {
                 s.Draw(_textures["assets/mainMenu1"], _introMenuposize, Color.White);
+                if (gameModeEnum == ClassEnums.GameModeEnum.Easy)
+                {
+                    s.Draw(_textures["assets/easy"], _gameModeEasyPos, Color.White);
+                }
+                else if (gameModeEnum == ClassEnums.GameModeEnum.Hard)
+                {
+                    s.Draw(_textures["assets/hard"], _gameModeHardPos, Color.White);
+                }
+            }
+            else
+            {
+                s.Draw(_textures["assets/gradient"], _bPosize, Color.White);
+                s.Draw(_textures["assets/kooh"], _kPosize, Color.White);
+                s.Draw(_textures["assets/sides"], _sPosise1, Color.White);
+                s.Draw(_textures["assets/sides"], _sPosise2, Color.White);
+            }
             if (gameState == ClassEnums.GameStateEnum.Pause)
                 s.Draw(_textures["assets/pause"], _pauseposize, Color.White);
             if (gameState == ClassEnums.GameStateEnum.Option)
