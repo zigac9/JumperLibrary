@@ -97,8 +97,8 @@ public class MyInputField
                     if (key == Keys.Space && !allowSpaces)
                         continue;
 
-                    if (key is not (Keys.CapsLock or Keys.LeftShift or Keys.RightShift or Keys.LeftControl
-                        or Keys.RightControl or Keys.Tab or Keys.LeftWindows or Keys.RightAlt))
+                    if (key is >= Keys.D0 and <= Keys.D9 or >= Keys.NumPad0 and <= Keys.NumPad9
+                        or >= Keys.A and <= Keys.Z)
                     {
                         if (key is (Keys.D0 or Keys.D1 or Keys.D2 or Keys.D3 or Keys.D4 or Keys.D5 or Keys.D6 or Keys.D7
                             or Keys.D8 or Keys.D9))
@@ -106,6 +106,7 @@ public class MyInputField
                         else
                             text.Append(key == Keys.Space ? ' ' : key.ToString());
                     }
+
                     if (font.MeasureString(text).X > rectangle.Width - 2 * widthPadding)
                         startIndexToDraw += 1;
                 }
@@ -154,8 +155,9 @@ public class MyInputField
 
     public void DrawName(SpriteBatch sp)
     {
-        sp.DrawString(font, "Hello " + text.ToString(), new Vector2(30,675), Color.Black, 0f, new Vector2(0, 0), new Vector2(1, 1),
-                SpriteEffects.None, 0f);
+        sp.DrawString(font, "Hello " + text, new Vector2(30, 675), Color.Black, 0f, new Vector2(0, 0),
+            new Vector2(1, 1),
+            SpriteEffects.None, 0f);
     }
 
     #region HelperFunctions
