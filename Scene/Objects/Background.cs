@@ -73,11 +73,23 @@ public class Background
     private int HScore4 { get; set; }
 
     private int HScore5 { get; set; }
+    
+    private string HScore1name { get; set; }
+
+    private string HScore2name { get; set; }
+
+    private string HScore3name { get; set; }
+
+    private string HScore4name { get; set; }
+
+    private string HScore5name { get; set; }
+
 
     private int Bests { get; set; }
 
     public void Initialize()
     {
+        HScore1name = "";HScore2name = "";HScore3name = "";HScore4name = "";HScore5name = "";
         _bPosize = new Rectangle(0, -6480, 480, 7200);
         _kPosize = new Rectangle(0, 0, 480, 720);
         _sPosise1 = new Rectangle(0, -2880, 480, 3600);
@@ -88,44 +100,51 @@ public class Background
 
     public void Draw(SpriteBatch s, ClassEnums.GameStateEnum gameState, ScorClass score)
     {
-        s.Draw(_textures["assets/gradient"], _bPosize, Color.White);
-        s.Draw(_textures["assets/kooh"], _kPosize, Color.White);
-        s.Draw(_textures["assets/sides"], _sPosise1, Color.White);
-        s.Draw(_textures["assets/sides"], _sPosise2, Color.White);
-        if (gameState == ClassEnums.GameStateEnum.IntroMenu)
-            s.Draw(_textures["assets/mainMenu1"], _introMenuposize, Color.White);
-        if (gameState == ClassEnums.GameStateEnum.Pause)
-            s.Draw(_textures["assets/pause"], _pauseposize, Color.White);
-        if (gameState == ClassEnums.GameStateEnum.Option)
+        if (gameState == ClassEnums.GameStateEnum.InputName)
         {
-            s.Draw(_textures["assets/option"], _optionposize, Color.White);
-            if (SoundCheck)
-                s.Draw(_textures["assets/sOn"], _sOnposize, Color.White);
-            else
-                s.Draw(_textures["assets/sOff"], _sOffposize, Color.White);
-            
-            if(SoundEffectCheck)    
-                s.Draw(_textures["assets/sOn"], _sOnposizeMusic, Color.White);
-            else
-                s.Draw(_textures["assets/sOff"], _sOffposizeMusic, Color.White);
-
+            s.Draw(_textures["assets/input"], _introMenuposize, Color.White);
         }
-
-        if (gameState == ClassEnums.GameStateEnum.GameOver)
+        else
         {
-            s.Draw(_textures["assets/gameOver"], _gameOverposize, Color.White);
-            s.DrawString(score.SFont, score.Score.ToString(), new Vector2(325f, 228f), Color.Black);
-            s.DrawString(score.SFont, Bests.ToString(), new Vector2(325f, 290f), Color.Black);
-        }
+            s.Draw(_textures["assets/gradient"], _bPosize, Color.White);
+            s.Draw(_textures["assets/kooh"], _kPosize, Color.White);
+            s.Draw(_textures["assets/sides"], _sPosise1, Color.White);
+            s.Draw(_textures["assets/sides"], _sPosise2, Color.White);
+            if (gameState == ClassEnums.GameStateEnum.IntroMenu)
+                s.Draw(_textures["assets/mainMenu1"], _introMenuposize, Color.White);
+            if (gameState == ClassEnums.GameStateEnum.Pause)
+                s.Draw(_textures["assets/pause"], _pauseposize, Color.White);
+            if (gameState == ClassEnums.GameStateEnum.Option)
+            {
+                s.Draw(_textures["assets/option"], _optionposize, Color.White);
+                if (SoundCheck)
+                    s.Draw(_textures["assets/sOn"], _sOnposize, Color.White);
+                else
+                    s.Draw(_textures["assets/sOff"], _sOffposize, Color.White);
+                
+                if(SoundEffectCheck)    
+                    s.Draw(_textures["assets/sOn"], _sOnposizeMusic, Color.White);
+                else
+                    s.Draw(_textures["assets/sOff"], _sOffposizeMusic, Color.White);
 
-        if (gameState == ClassEnums.GameStateEnum.HScore)
-        {
-            s.Draw(_textures["assets/highscore"], _hScoreposize, Color.White);
-            s.DrawString(score.SFont, HScore1.ToString(), new Vector2(150f, 295f), Color.Black);
-            s.DrawString(score.SFont, HScore2.ToString(), new Vector2(150f, 345f), Color.Black);
-            s.DrawString(score.SFont, HScore3.ToString(), new Vector2(150f, 400f), Color.Black);
-            s.DrawString(score.SFont, HScore4.ToString(), new Vector2(150f, 450f), Color.Black);
-            s.DrawString(score.SFont, HScore5.ToString(), new Vector2(150f, 500f), Color.Black);
+            }
+
+            if (gameState == ClassEnums.GameStateEnum.GameOver)
+            {
+                s.Draw(_textures["assets/gameOver"], _gameOverposize, Color.White);
+                s.DrawString(score.SFont, score.Score.ToString(), new Vector2(325f, 228f), Color.Black);
+                s.DrawString(score.SFont, Bests.ToString(), new Vector2(325f, 290f), Color.Black);
+            }
+
+            if (gameState == ClassEnums.GameStateEnum.HScore)
+            {
+                s.Draw(_textures["assets/highscore"], _hScoreposize, Color.White);
+                s.DrawString(score.SFont, HScore1name + ": " + HScore1.ToString(), new Vector2(150f, 295f), Color.Black);
+                s.DrawString(score.SFont, HScore1name + ": " + HScore2.ToString(), new Vector2(150f, 345f), Color.Black);
+                s.DrawString(score.SFont, HScore1name + ": " + HScore3.ToString(), new Vector2(150f, 400f), Color.Black);
+                s.DrawString(score.SFont, HScore1name + ": " + HScore4.ToString(), new Vector2(150f, 450f), Color.Black);
+                s.DrawString(score.SFont, HScore1name + ": " + HScore5.ToString(), new Vector2(150f, 500f), Color.Black);
+            }
         }
     }
 
@@ -150,5 +169,16 @@ public class Background
         HScore3 = scoreManager.Highscores[2];
         HScore4 = scoreManager.Highscores[3];
         HScore5 = scoreManager.Highscores[4];
+
+        if (HScore1 != 0)
+            HScore1name = scoreManager.Scores[0].PlayerName;
+        if (HScore2 != 0)
+            HScore2name = scoreManager.Scores[1].PlayerName;
+        if (HScore3 != 0)
+            HScore3name = scoreManager.Scores[2].PlayerName;
+        if (HScore4 != 0)
+            HScore4name = scoreManager.Scores[3].PlayerName;
+        if (HScore5 != 0)
+            HScore5name = scoreManager.Scores[4].PlayerName;
     }
 }

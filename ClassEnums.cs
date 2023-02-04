@@ -15,7 +15,9 @@ namespace JumperLibrary
             Pause,
             Option,
             GameOver,
-            HScore
+            HScore,
+            HScoreHard,
+            InputName
         }
 
         public enum PlayerOrientEnum

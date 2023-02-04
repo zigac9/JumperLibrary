@@ -24,11 +24,11 @@ public class ScoreManager
 
     public List<int> Highscores { get; }
 
-    private List<Score> Scores { get; set; }
+    public List<Score> Scores { get; set; }
 
     public void Add(Score score, string playername)
     {
-        var exists = Scores.Any(item => item.PlayerName == playername);
+        var exists = Exists(playername);
         if (exists)
         {
             var index = Scores.FindIndex(a => a.PlayerName == playername);
@@ -43,6 +43,11 @@ public class ScoreManager
         Scores = Scores.OrderByDescending(c => c.Value).ToList();
 
         UpdateHighscores();
+    }
+
+    public bool Exists(string playerName)
+    {
+        return Scores.Any(item => item.PlayerName == playerName);
     }
 
     public int BestOfYou(string playername)
