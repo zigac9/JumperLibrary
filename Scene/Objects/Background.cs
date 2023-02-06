@@ -20,8 +20,8 @@ public class Background
     private readonly Rectangle _sOnposizeMusic;
     private Rectangle _sPosise1;
     private Rectangle _sPosise2;
-    private Rectangle _gameModeEasyPos;
-    private Rectangle _gameModeHardPos;
+    private readonly Rectangle _gameModeEasyPos;
+    private readonly Rectangle _gameModeHardPos;
     private readonly Dictionary<string, Texture2D> _textures;
 
     public Background(Dictionary<string, Texture2D> textures)
@@ -78,22 +78,22 @@ public class Background
 
     private int HScore5 { get; set; }
     
-    private string HScore1name { get; set; }
+    private string HScore1Name { get; set; }
 
-    private string HScore2name { get; set; }
+    private string HScore2Name { get; set; }
 
-    private string HScore3name { get; set; }
+    private string HScore3Name { get; set; }
 
-    private string HScore4name { get; set; }
+    private string HScore4Name { get; set; }
 
-    private string HScore5name { get; set; }
+    private string HScore5Name { get; set; }
 
 
     private int Bests { get; set; }
 
     public void Initialize()
     {
-        HScore1name = "";HScore2name = "";HScore3name = "";HScore4name = "";HScore5name = "";
+        HScore1Name = "";HScore2Name = "";HScore3Name = "";HScore4Name = "";HScore5Name = "";
         _bPosize = new Rectangle(0, -6480, 480, 7200);
         _kPosize = new Rectangle(0, 0, 480, 720);
         _sPosise1 = new Rectangle(0, -2880, 480, 3600);
@@ -160,12 +160,19 @@ public class Background
 
             if (gameState == ClassEnums.GameStateEnum.HScore)
             {
-                s.Draw(_textures["assets/highscore"], _hScoreposize, Color.White);
-                s.DrawString(score.SFont, HScore1name + ": " + HScore1.ToString(), new Vector2(150f, 295f), Color.Black);
-                s.DrawString(score.SFont, HScore1name + ": " + HScore2.ToString(), new Vector2(150f, 345f), Color.Black);
-                s.DrawString(score.SFont, HScore1name + ": " + HScore3.ToString(), new Vector2(150f, 400f), Color.Black);
-                s.DrawString(score.SFont, HScore1name + ": " + HScore4.ToString(), new Vector2(150f, 450f), Color.Black);
-                s.DrawString(score.SFont, HScore1name + ": " + HScore5.ToString(), new Vector2(150f, 500f), Color.Black);
+                if (gameModeEnum == ClassEnums.GameModeEnum.Easy)
+                {
+                    s.Draw(_textures["assets/Hscore"], _hScoreposize, Color.White);
+                }
+                else if (gameModeEnum == ClassEnums.GameModeEnum.Hard)
+                {
+                    s.Draw(_textures["assets/HscoreHard"], _hScoreposize, Color.White);
+                }
+                s.DrawString(score.SFont, HScore1Name + ": " + HScore1, new Vector2(150f, 295f), Color.Black);
+                s.DrawString(score.SFont, HScore2Name + ": " + HScore2, new Vector2(150f, 345f), Color.Black);
+                s.DrawString(score.SFont, HScore3Name + ": " + HScore3, new Vector2(150f, 400f), Color.Black);
+                s.DrawString(score.SFont, HScore4Name + ": " + HScore4, new Vector2(150f, 450f), Color.Black);
+                s.DrawString(score.SFont, HScore5Name + ": " + HScore5, new Vector2(150f, 500f), Color.Black);
             }
         }
     }
@@ -193,14 +200,14 @@ public class Background
         HScore5 = scoreManager.Highscores[4];
 
         if (HScore1 != 0)
-            HScore1name = scoreManager.Scores[0].PlayerName;
+            HScore1Name = scoreManager.Scores[0].PlayerName;
         if (HScore2 != 0)
-            HScore2name = scoreManager.Scores[1].PlayerName;
+            HScore2Name = scoreManager.Scores[1].PlayerName;
         if (HScore3 != 0)
-            HScore3name = scoreManager.Scores[2].PlayerName;
+            HScore3Name = scoreManager.Scores[2].PlayerName;
         if (HScore4 != 0)
-            HScore4name = scoreManager.Scores[3].PlayerName;
+            HScore4Name = scoreManager.Scores[3].PlayerName;
         if (HScore5 != 0)
-            HScore5name = scoreManager.Scores[4].PlayerName;
+            HScore5Name = scoreManager.Scores[4].PlayerName;
     }
 }

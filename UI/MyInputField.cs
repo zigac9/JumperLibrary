@@ -9,52 +9,46 @@ namespace JumperLibrary;
 public class MyInputField
 {
     // Used to leave some space for text when drawing the rectangle for the Input Field
-    private const int widthPadding = 4;
-    private const int heightPadding = 4;
-    private readonly SpriteFont font; // Font used for text rendering
-    private readonly Rectangle rectangle; // The hitbox for the Input Field
-    private readonly int textLengthCap; // The maximum length the Input Field can store
-    private readonly Texture2D whiteTexture; // Used to  draw a rectangle for the Input Field
-    public bool allowSpaces; // Allow the use of the spacebar (default is false)
-    public Color backgroundColor; // Input Field background color (Default is white)
-    public Color borderColor; // Input Field border color (Default is black)
-    public int borderThickness;
-    private bool finishedWriting; // Triggered when Input Field loses focus
-    private bool hasFocus; // Does the Input Field have focus right now?
-    private KeyboardState lastKeyboardState; // This is the keyboard state for last frame, used for keyboard events
-    private Vector2 position; // Stores the position of Input Field
-    public float scale; // Scale of the Input Field (default is 1)
-    private int startIndexToDraw; // Start drwaing from this index
-    public StringBuilder text; // Actual text for the Input Field
-    public Color textColor; // Color of the main text (Default is black)
+    private const int WidthPadding = 4;
+    private const int HeightPadding = 4;
+    private readonly SpriteFont _font; // Font used for text rendering
+    private readonly Rectangle _rectangle; // The hitbox for the Input Field
+    private readonly int _textLengthCap; // The maximum length the Input Field can store
+    private readonly Texture2D _whiteTexture; // Used to  draw a rectangle for the Input Field
+    public readonly bool AllowSpaces; // Allow the use of the spacebar (default is false)
+    public Color BackgroundColor; // Input Field background color (Default is white)
+    public Color BorderColor; // Input Field border color (Default is black)
+    public readonly int BorderThickness;
+    private bool _finishedWriting; // Triggered when Input Field loses focus
+    private bool _hasFocus; // Does the Input Field have focus right now?
+    private KeyboardState _lastKeyboardState; // This is the keyboard state for last frame, used for keyboard events
+    private Vector2 _position; // Stores the position of Input Field
+    public readonly float Scale; // Scale of the Input Field (default is 1)
+    private int _startIndexToDraw; // Start drwaing from this index
+    public StringBuilder Text { get; set; } // Actual text for the Input Field
+    public Color TextColor; // Color of the main text (Default is black)
 
     public MyInputField(GraphicsDevice device, SpriteFont font, Vector2 position, string hintText,
         int maxLength = int.MaxValue)
     {
-        this.font = font;
+        _font = font;
         HintText = hintText;
-        this.position = position;
+        _position = position;
 
-        allowSpaces = true;
-        textLengthCap = maxLength;
-        hasFocus = false;
-        textColor = Color.Black;
-        scale = 1;
-        text = new StringBuilder();
-        rectangle = new Rectangle(position.ToPoint(),
-            new Point(widthPadding * 2, heightPadding * 2) + font.MeasureString(hintText).ToPoint());
-        whiteTexture = new Texture2D(device, 1, 1);
-        whiteTexture.SetData(new[] { Color.White });
-        borderColor = Color.Black;
-        backgroundColor = Color.White;
-        borderThickness = 2;
-        finishedWriting = false;
-    }
-
-    public StringBuilder Text
-    {
-        get => text;
-        set => text = value;
+        AllowSpaces = true;
+        _textLengthCap = maxLength;
+        _hasFocus = false;
+        TextColor = Color.Black;
+        Scale = 1;
+        Text = new StringBuilder();
+        _rectangle = new Rectangle(position.ToPoint(),
+            new Point(WidthPadding * 2, HeightPadding * 2) + font.MeasureString(hintText).ToPoint());
+        _whiteTexture = new Texture2D(device, 1, 1);
+        _whiteTexture.SetData(new[] { Color.White });
+        BorderColor = Color.Black;
+        BackgroundColor = Color.White;
+        BorderThickness = 2;
+        _finishedWriting = false;
     }
 
     public string HintText { get; set; }
@@ -65,97 +59,98 @@ public class MyInputField
         foreach (var key in keyboardState.GetPressedKeys())
             if (KeyJustPressed(key, keyboardState))
             {
-                if (hasFocus && (key == Keys.Back || key == Keys.Delete)) // User wants to erase a character
+                if (_hasFocus && (key == Keys.Back || key == Keys.Delete)) // User wants to erase a character
                 {
-                    if (text.Length > 0)
+                    if (Text.Length > 0)
                     {
-                        text.Remove(text.Length - 1, 1);
-                        startIndexToDraw = Math.Clamp(startIndexToDraw - 1, 0, int.MaxValue);
+                        Text.Remove(Text.Length - 1, 1);
+                        _startIndexToDraw = Math.Clamp(_startIndexToDraw - 1, 0, int.MaxValue);
                     }
                 }
                 else if (key == Keys.Enter) // User wants to finish writing to the Input Field
                 {
-                    var prevHasFocus = hasFocus;
+                    var prevHasFocus = _hasFocus;
 
-                    hasFocus = !hasFocus;
-                    finishedWriting = true;
+                    _hasFocus = !_hasFocus;
+                    _finishedWriting = true;
 
-                    borderColor = Color.Green;
+                    BorderColor = Color.Green;
 
-                    if (prevHasFocus != hasFocus && !hasFocus)
+                    if (prevHasFocus != _hasFocus && !_hasFocus)
                     {
-                        borderColor = Color.Black;
-                        finishedWriting = true;
+                        BorderColor = Color.Black;
+                        _finishedWriting = true;
                     }
                 }
-                else if (hasFocus && text.Length < textLengthCap) // If user can add more characters
+                else if (_hasFocus && Text.Length < _textLengthCap) // If user can add more characters
                 {
-                    var characterToDraw = keyboardState.CapsLock || keyboardState.IsKeyDown(Keys.LeftShift)
-                        ? key.ToString()
-                        : key.ToString().ToLower();
 
-                    if (key == Keys.Space && !allowSpaces)
+
+                    if (key == Keys.Space && !AllowSpaces)
                         continue;
 
                     if (key is >= Keys.D0 and <= Keys.D9 or >= Keys.NumPad0 and <= Keys.NumPad9
-                        or >= Keys.A and <= Keys.Z)
+                        or >= Keys.A and <= Keys.Z or Keys.Space)
                     {
+                        var characterToDraw = keyboardState.CapsLock || keyboardState.IsKeyDown(Keys.LeftShift)
+                            ? key.ToString()
+                            : key.ToString().ToLower();
                         if (key is (Keys.D0 or Keys.D1 or Keys.D2 or Keys.D3 or Keys.D4 or Keys.D5 or Keys.D6 or Keys.D7
                             or Keys.D8 or Keys.D9))
-                            text.Append(key == Keys.Space ? ' ' : key.ToString().Substring(1));
+                            Text.Append(characterToDraw[1..]);
                         else
-                            text.Append(key == Keys.Space ? ' ' : key.ToString());
+                            Text.Append(key == Keys.Space ? ' ' : characterToDraw);
                     }
 
-                    if (font.MeasureString(text).X > rectangle.Width - 2 * widthPadding)
-                        startIndexToDraw += 1;
+                    if (_font.MeasureString(Text).X > _rectangle.Width - 2 * WidthPadding)
+                        _startIndexToDraw += 1;
                 }
             }
 
-        lastKeyboardState = keyboardState;
+        _lastKeyboardState = keyboardState;
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        var scaledRectangle = new Rectangle(position.ToPoint(),
-            new Point((int)(rectangle.Width * scale), (int)(rectangle.Height * scale)));
+        var scaledRectangle = new Rectangle(_position.ToPoint(),
+            new Point((int)(_rectangle.Width * Scale), (int)(_rectangle.Height * Scale)));
 
         // Draw Background
-        spriteBatch.Draw(whiteTexture, scaledRectangle, backgroundColor);
+        spriteBatch.Draw(_whiteTexture, scaledRectangle, BackgroundColor);
 
         // Draw border on top
         DrawBorder(spriteBatch, scaledRectangle);
 
         // Draw text
         if (GetLength() > 0)
-            spriteBatch.DrawString(font, text.ToString().Substring(startIndexToDraw),
-                position + new Vector2(widthPadding, heightPadding), textColor, 0, Vector2.Zero, scale,
+            spriteBatch.DrawString(_font, Text.ToString().Substring(_startIndexToDraw),
+                _position + new Vector2(WidthPadding, HeightPadding), TextColor, 0, Vector2.Zero, Scale,
                 SpriteEffects.None, 0);
         else
-            spriteBatch.DrawString(font, HintText, position + new Vector2(widthPadding, heightPadding), Color.Gray, 0,
-                Vector2.Zero, scale, SpriteEffects.None, 0);
+            spriteBatch.DrawString(_font, HintText, _position + new Vector2(WidthPadding, HeightPadding), Color.Gray, 0,
+                Vector2.Zero, Scale, SpriteEffects.None, 0);
     }
 
     // Does the Input Field have any text inside?
     public bool HasValue()
     {
-        return text.Length > 0;
+        return Text.Length > 0;
     }
 
     // Get the length if the text inside the Input Field
     public int GetLength()
     {
-        return text.Length;
+        return Text.Length;
     }
 
     public bool FinishedEditing()
     {
-        return finishedWriting;
+        return _finishedWriting;
     }
 
     public void DrawName(SpriteBatch sp)
     {
-        sp.DrawString(font, "Hello " + text, new Vector2(30, 675), Color.Black, 0f, new Vector2(0, 0),
+        sp.DrawString(_font, "Hello " + Text, new Vector2(30, 675), Color.Black, 0f, new Vector2(0, 0),
             new Vector2(1, 1),
             SpriteEffects.None, 0f);
     }
@@ -165,20 +160,20 @@ public class MyInputField
     // Is the given key just pressed during this frame?
     private bool KeyJustPressed(Keys key, KeyboardState state)
     {
-        return state.IsKeyDown(key) && lastKeyboardState.IsKeyUp(key);
+        return state.IsKeyDown(key) && _lastKeyboardState.IsKeyUp(key);
     }
 
     private void DrawBorder(SpriteBatch spriteBatch, Rectangle rect)
     {
-        spriteBatch.Draw(whiteTexture, new Rectangle(rect.Left, rect.Top, rect.Width, borderThickness),
-            borderColor); // Top
-        spriteBatch.Draw(whiteTexture,
-            new Rectangle(rect.Left, rect.Bottom - borderThickness, rect.Width, borderThickness),
-            borderColor); // Bottom
-        spriteBatch.Draw(whiteTexture, new Rectangle(rect.Left, rect.Top, borderThickness, rect.Height),
-            borderColor); // Left
-        spriteBatch.Draw(whiteTexture,
-            new Rectangle(rect.Right - borderThickness, rect.Top, borderThickness, rect.Height), borderColor); // Right
+        spriteBatch.Draw(_whiteTexture, new Rectangle(rect.Left, rect.Top, rect.Width, BorderThickness),
+            BorderColor); // Top
+        spriteBatch.Draw(_whiteTexture,
+            new Rectangle(rect.Left, rect.Bottom - BorderThickness, rect.Width, BorderThickness),
+            BorderColor); // Bottom
+        spriteBatch.Draw(_whiteTexture, new Rectangle(rect.Left, rect.Top, BorderThickness, rect.Height),
+            BorderColor); // Left
+        spriteBatch.Draw(_whiteTexture,
+            new Rectangle(rect.Right - BorderThickness, rect.Top, BorderThickness, rect.Height), BorderColor); // Right
     }
 
     #endregion

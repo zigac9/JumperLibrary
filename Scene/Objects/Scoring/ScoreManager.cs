@@ -7,8 +7,6 @@ namespace JumperLibrary;
 
 public class ScoreManager
 {
-    private const string FileName = "scores.xml";
-
     private ScoreManager()
         : this(new List<Score>())
     {
@@ -57,15 +55,17 @@ public class ScoreManager
         return bestofyou.Count > 0 ? bestofyou[0].Value : 0;
     }
 
-    public static ScoreManager Load()
+    public static ScoreManager Load(string fileName)
     {
+        //v to funkcijo pošlji filename, naredi nov score manager v main
+    
         // If there isn't a file to load - create a new instance of "ScoreManager"
-        if (!File.Exists(FileName))
+        if (!File.Exists(fileName))
             return new ScoreManager();
 
         // Otherwise we load the file
 
-        using var reader = new StreamReader(new FileStream(FileName, FileMode.Open));
+        using var reader = new StreamReader(new FileStream(fileName, FileMode.Open));
         var serilizer = new XmlSerializer(typeof(List<Score>));
 
         var scores = (List<Score>)serilizer.Deserialize(reader);
@@ -99,10 +99,10 @@ public class ScoreManager
         // Highscores = Scores.Take(5).ToList(); // Takes the first 5 elements
     }
 
-    public static void Save(ScoreManager scoreManager)
+    public static void Save(ScoreManager scoreManager, string fileName)
     {
         // Overrides the file if it alreadt exists
-        using var writer = new StreamWriter(new FileStream(FileName, FileMode.Create));
+        using var writer = new StreamWriter(new FileStream(fileName, FileMode.Create));
         var serilizer = new XmlSerializer(typeof(List<Score>));
 
         serilizer.Serialize(writer, scoreManager.Scores);
