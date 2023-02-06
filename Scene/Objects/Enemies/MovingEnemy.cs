@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -20,9 +19,10 @@ public class MovingEnemy
     private Vector2 _speed;
 
     public MovingEnemy(IReadOnlyDictionary<string, Texture2D> textures,
-        IReadOnlyDictionary<string, SpriteSheet> spriteSheets)
+        IReadOnlyDictionary<string, SpriteSheet> spriteSheets, IReadOnlyDictionary<string, SpriteFont> spriteFontsLoad)
     {
         TextureRand = 0;
+        SFont = spriteFontsLoad["assets/SpriteFont1"];
         _enemyList = new List<Texture2D> { textures["assets/tri"], textures["assets/stiri"], textures["assets/pet"] };
         _bossList = new List<Texture2D> { textures["assets/dva"], textures["assets/sest"] };
         GetAnimatedSprite = new AnimatedSprite(spriteSheets["assets/fire.sf"]);
@@ -36,6 +36,7 @@ public class MovingEnemy
     }
 
     public AnimatedSprite GetAnimatedSprite { get; }
+    private SpriteFont SFont { get; }
 
     public bool Visible { get; set; }
 
@@ -63,7 +64,7 @@ public class MovingEnemy
         _drawFire = false;
         Degree = 0;
         //TODO popravi ko bo za konc
-        Start = 500;
+        Start = 100;
         End = 1500;
         View = 500;
         Step = 1000;
@@ -98,31 +99,42 @@ public class MovingEnemy
     {
         //Debug.WriteLine("Speed:" + _speed);
         _position.X += (int)_speed.X;
-        if (_speed.X < -3)
-            _speed = new Vector2(-3, 0);
-        else if (_speed.X > 3)
-            _speed = new Vector2(3, 0);
         if (_position.X > 410)
             _speed.X *= -1;
         if (_position.X < 10)
             _speed.X *= -1;
         // Debug.WriteLine("Speed po metodi:" + _speed);
-
     }
 
     public void Update(Bullet bullet, Bullet bulletEnemy, Sound sound, Player player,
         ClassEnums.GameStateEnum currentGameState, ref bool collisionCheck, bool SoundEffectCheck)
     {
-        if (Life > 0 && BulletCloseCollision(bullet) && Visible)
+        if (Life > 0 && bullet.IsCheck && BulletCloseCollision(bullet) && Visible)
         {
             //Debug.WriteLine(Life);
             if (!NotDie)
             {
-                if (_speed.X < 0)
-                    _speed = new Vector2(-40, 0);
-                else if (_speed.X > 0)
-                    _speed = new Vector2(40, 0);
-                //Move();
+                switch (_position.X)
+                {
+                    case >= 0 and < 160:
+                        _position = new Rectangle(240, _position.Y, _position.Width, _position.Height);
+                        break;
+                    case >= 160 and < 320 when _speed.X > 0:
+                        _position = new Rectangle(400, _position.Y, _position.Width, _position.Height);
+                        break;
+                    case >= 160 and < 320:
+                    {
+                        if(_speed.X < 0)
+                        {
+                            _position = new Rectangle(80, _position.Y, _position.Width, _position.Height);
+                        }
+                        break;
+                    }
+                    case >= 320 and < 480:
+                        _position = new Rectangle(240, _position.Y, _position.Width, _position.Height);
+                        break;
+                }
+                Move();
                 Life--;
             }
             else
@@ -183,6 +195,21 @@ public class MovingEnemy
             collisionCheck = false;
             Life = MaxLife;
         }
+    }
+    
+    public void LifeDraw(SpriteBatch sp)
+    {
+        String currentLife = "";
+        if (NotDie)
+        {
+            currentLife = "Enemy life: " +(Life+1);
+        }
+        else
+        {
+            currentLife = "BOSS life: infinity";
+        }
+        sp.DrawString(SFont, "Enemy life: " + currentLife, new Vector2(0,40), Color.White, 0f, new Vector2(0, 0), new Vector2(1, 1),
+            SpriteEffects.None, 0f);
     }
 
     private bool BulletCollision(Bullet bullet)

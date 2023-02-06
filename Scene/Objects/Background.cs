@@ -124,7 +124,6 @@ public class Background
             }
             else if (gameState == ClassEnums.GameStateEnum.About)
             {
-                //TODO CHANGE WITH REAL ONE
                 s.Draw(_textures["assets/mainMenu1"], _introMenuposize, Color.White);
             }
             else

@@ -9,7 +9,7 @@ public class ScorClass
 {
     private readonly Vector2 _position;
 
-    public ScorClass(Dictionary<string, SpriteFont> spriteFontsLoad)
+    public ScorClass(IReadOnlyDictionary<string, SpriteFont> spriteFontsLoad)
     {
         Score = 0;
         _position = new Vector2(15f, 4f);
