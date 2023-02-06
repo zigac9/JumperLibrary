@@ -115,14 +115,14 @@ public class MovingEnemy
     {
         if (Life > 0 && BulletCloseCollision(bullet) && Visible)
         {
-            Debug.WriteLine(Life);
+            //Debug.WriteLine(Life);
             if (!NotDie)
             {
                 if (_speed.X < 0)
                     _speed = new Vector2(-40, 0);
                 else if (_speed.X > 0)
                     _speed = new Vector2(40, 0);
-                Move();
+                //Move();
                 Life--;
             }
             else
