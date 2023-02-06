@@ -55,11 +55,23 @@ public class MyInputField
 
     public void Update(KeyboardState keyboardState, MouseState mouseState)
     {
+        switch (mouseState)
+        {
+            case { LeftButton: ButtonState.Pressed, X: > 100 and < 388, Y: > 348 and < 402 }:
+                _hasFocus = true;
+                BorderColor = Color.Green;
+                break;
+            case { LeftButton: ButtonState.Pressed }:
+                _hasFocus = false;
+                BorderColor = Color.Black;
+                break;
+        }
+        
         // Keys pressed being recorded here
         foreach (var key in keyboardState.GetPressedKeys())
             if (KeyJustPressed(key, keyboardState))
             {
-                if (_hasFocus && (key == Keys.Back || key == Keys.Delete)) // User wants to erase a character
+                if (_hasFocus && key is Keys.Back or Keys.Delete) // User wants to erase a character
                 {
                     if (Text.Length > 0)
                     {
@@ -67,25 +79,21 @@ public class MyInputField
                         _startIndexToDraw = Math.Clamp(_startIndexToDraw - 1, 0, int.MaxValue);
                     }
                 }
-                else if (key == Keys.Enter) // User wants to finish writing to the Input Field
-                {
-                    var prevHasFocus = _hasFocus;
-
-                    _hasFocus = !_hasFocus;
-                    _finishedWriting = true;
-
-                    BorderColor = Color.Green;
-
-                    if (prevHasFocus != _hasFocus && !_hasFocus)
-                    {
-                        BorderColor = Color.Black;
-                        _finishedWriting = true;
-                    }
-                }
+                // else if (key == Keys.Enter) // User wants to finish writing to the Input Field
+                // {
+                //     var prevHasFocus = _hasFocus;
+                //
+                //     _hasFocus = !_hasFocus;
+                //
+                //     BorderColor = Color.Green;
+                //
+                //     if (prevHasFocus != _hasFocus && !_hasFocus)
+                //     {
+                //         BorderColor = Color.Black;
+                //     }
+                // }
                 else if (_hasFocus && Text.Length < _textLengthCap) // If user can add more characters
                 {
-
-
                     if (key == Keys.Space && !AllowSpaces)
                         continue;
 
@@ -106,7 +114,6 @@ public class MyInputField
                         _startIndexToDraw += 1;
                 }
             }
-
         _lastKeyboardState = keyboardState;
     }
 
