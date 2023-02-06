@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.Sprites;
 
-
 namespace JumperLibrary;
 
 public class MovingEnemy
@@ -63,7 +62,6 @@ public class MovingEnemy
         _bullFirePosition = new Vector2(0, 0);
         _drawFire = false;
         Degree = 0;
-        //TODO popravi ko bo za konc
         Start = 100;
         End = 1500;
         View = 500;
@@ -122,12 +120,9 @@ public class MovingEnemy
                     case >= 160 and < 320 when _speed.X > 0:
                         _position = new Rectangle(400, _position.Y, _position.Width, _position.Height);
                         break;
-                    case >= 160 and < 320:
+                    case >= 160 and < 320 when _speed.X < 0:
                     {
-                        if(_speed.X < 0)
-                        {
-                            _position = new Rectangle(80, _position.Y, _position.Width, _position.Height);
-                        }
+                        _position = new Rectangle(80, _position.Y, _position.Width, _position.Height);
                         break;
                     }
                     case >= 320 and < 480:
