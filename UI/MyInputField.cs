@@ -57,13 +57,17 @@ public class MyInputField
     {
         switch (mouseState)
         {
-            case { LeftButton: ButtonState.Pressed, X: > 100 and < 388, Y: > 348 and < 402 }:
+            case { LeftButton: ButtonState.Pressed, X: > 100 and < 388, Y: > 358 and < 412 }:
                 _hasFocus = true;
-                BorderColor = Color.Green;
+                BorderColor = Color.LightGreen;
+                BackgroundColor = Color.WhiteSmoke;
+                HintText = "Typing ...             ";
                 break;
             case { LeftButton: ButtonState.Pressed }:
                 _hasFocus = false;
                 BorderColor = Color.Black;
+                BackgroundColor = Color.White;
+                HintText = "Enter your name ...    ";
                 break;
         }
         
