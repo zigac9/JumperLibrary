@@ -124,7 +124,7 @@ public class Background
             }
             else if (gameState == ClassEnums.GameStateEnum.About)
             {
-                s.Draw(_textures["assets/mainMenu1"], _introMenuposize, Color.White);
+                s.Draw(_textures["assets/about"], _introMenuposize, Color.White);
             }
             else
             {
