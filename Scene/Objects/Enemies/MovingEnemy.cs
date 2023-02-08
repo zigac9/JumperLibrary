@@ -62,7 +62,7 @@ public class MovingEnemy
         _bullFirePosition = new Vector2(0, 0);
         _drawFire = false;
         Degree = 0;
-        Start = 100;
+        Start = 500;
         End = 1500;
         View = 500;
         Step = 1000;
@@ -195,13 +195,13 @@ public class MovingEnemy
     public void LifeDraw(SpriteBatch sp)
     {
         String currentLife = "";
-        if (NotDie)
+        if (!NotDie)
         {
             currentLife = "Enemy life: " +(Life+1);
         }
         else
         {
-            currentLife = "BOSS life: infinity";
+            currentLife = "BOSS life: inf";
         }
         sp.DrawString(SFont, "Enemy life: " + currentLife, new Vector2(0,40), Color.White, 0f, new Vector2(0, 0), new Vector2(1, 1),
             SpriteEffects.None, 0f);

@@ -37,7 +37,7 @@ public class Trampo
     public void Initialize()
     {
         ScoreToMove = 1000;
-        ScoreMoveStep = 700;
+        ScoreMoveStep = 600;
         TRand = -1;
         Visible = false;
         DrawVisible = true;
