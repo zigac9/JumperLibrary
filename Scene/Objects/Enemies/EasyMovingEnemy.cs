@@ -39,7 +39,7 @@ public class EasyMovingEnemy
     }
 
     public bool Visible { get; set; }
-    
+
     public void Initialize()
     {
         _position = new Rectangle(20, 750, 80, 55);
@@ -97,15 +97,11 @@ public class EasyMovingEnemy
     {
         //enemy dead
         if (player.PlayerPosition.Bottom > _position.Top && player.PlayerPosition.Top < _position.Top &&
-            player.PlayerPosition.Left < _position.Right && player.PlayerPosition.Right > _position.Left && player.Speed.Y > 0)
-        {
+            player.PlayerPosition.Left < _position.Right && player.PlayerPosition.Right > _position.Left &&
+            player.Speed.Y > 0)
             return 0;
-        }
-        if (player.PlayerPosition.Intersects(_position) || _position.Intersects(player.PlayerPosition) && player.Speed.Y > 0)
-        {
-            return 1;
-
-        }
+        if (player.PlayerPosition.Intersects(_position) ||
+            (_position.Intersects(player.PlayerPosition) && player.Speed.Y > 0)) return 1;
         return 2;
     }
 
