@@ -38,12 +38,9 @@ public class EasyMovingEnemy
     }
 
     public bool Visible { get; set; }
-
-    public int StRand { get; set; }
-
+    
     public void Initialize()
     {
-        StRand = -1;
         _position = new Rectangle(20, 750, 80, 60);
         _speed = new Vector2(3, 0);
         Visible = false;
@@ -56,7 +53,7 @@ public class EasyMovingEnemy
             _speed.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
     }
 
-    public void Move()
+    private void Move()
     {
         _position.X += (int)_speed.X;
         if (_position.X > 410)
@@ -89,7 +86,7 @@ public class EasyMovingEnemy
         }
     }
 
-    public int Collision(Player player)
+    private int Collision(Player player)
     {
         if (_position.Y - player.PlayerPosition.Y - 45 < 5 && _position.Y - player.PlayerPosition.Y - 45 > -15 &&
             player.Speed.Y > 0 &&
@@ -105,7 +102,7 @@ public class EasyMovingEnemy
         return 2;
     }
 
-    public bool BulletCollision(Bullet bullet)
+    private bool BulletCollision(Bullet bullet)
     {
         var closest = new Vector2(
             MathHelper.Clamp(bullet.Position.X, Position.Left, Position.Right),
