@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace JumperLibrary;
 
@@ -23,7 +24,7 @@ public class EasyMovingEnemy
         Initialize();
     }
 
-    private int TextureRand { get; }
+    public int TextureRand { get; set; }
 
     public Rectangle Position
     {
@@ -41,8 +42,8 @@ public class EasyMovingEnemy
     
     public void Initialize()
     {
-        _position = new Rectangle(20, 750, 80, 60);
-        _speed = new Vector2(3, 0);
+        _position = new Rectangle(20, 750, 80, 55);
+        _speed = new Vector2(2, 0);
         Visible = false;
         _mecollision = false;
     }
@@ -62,19 +63,25 @@ public class EasyMovingEnemy
             _speed.X *= -1;
     }
 
-    public void Update(bool gameover, Player player, Bullet bullet)
+    public void Update(Bullet bullet, Sound sound, Player player,
+        ref bool gameOver, ref bool collisionCheck, bool thingsCollisionCheck, bool SoundEffectCheck)
     {
         Move();
 
-        if (Collision(player) == 0 && !gameover)
+        if (Collision(player) == 0 && !gameOver && thingsCollisionCheck)
         {
             player.Speed = new Vector2(player.Speed.X, -15);
             _mecollision = true;
         }
 
-        else if (Collision(player) == 1)
+        else if (Collision(player) == 1 && !gameOver &&
+                 thingsCollisionCheck && collisionCheck)
         {
             player.Speed = new Vector2(player.Speed.X, 0);
+            MediaPlayer.Stop();
+            if (SoundEffectCheck) sound.Dead.Play();
+            collisionCheck = false;
+            gameOver = true;
         }
 
         if (Position.Y < 780 && _mecollision)
@@ -88,17 +95,17 @@ public class EasyMovingEnemy
 
     private int Collision(Player player)
     {
-        if (_position.Y - player.PlayerPosition.Y - 45 < 5 && _position.Y - player.PlayerPosition.Y - 45 > -15 &&
-            player.Speed.Y > 0 &&
-            ((player.PlayerPosition.X + 15 > _position.X &&
-              player.PlayerPosition.X + 15 < _position.X + player.PlayerPosition.Width) ||
-             (player.PlayerPosition.X + 45 > _position.X &&
-              player.PlayerPosition.X + 45 <
-              _position.X + player.PlayerPosition.Width))) return 0; // our enemy is dead!
+        //enemy dead
+        if (player.PlayerPosition.Bottom > _position.Top && player.PlayerPosition.Top < _position.Top &&
+            player.PlayerPosition.Left < _position.Right && player.PlayerPosition.Right > _position.Left && player.Speed.Y > 0)
+        {
+            return 0;
+        }
+        if (player.PlayerPosition.Intersects(_position) || _position.Intersects(player.PlayerPosition) && player.Speed.Y > 0)
+        {
+            return 1;
 
-        if (player.PlayerPosition.Intersects(_position) ||
-            _position.Intersects(player.PlayerPosition)) return 1; // you are dead!
-
+        }
         return 2;
     }
 
