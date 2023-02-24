@@ -57,14 +57,11 @@ public class ScoreManager
 
     public static ScoreManager Load(string fileName)
     {
-        //v to funkcijo pošlji filename, naredi nov score manager v main
-    
         // If there isn't a file to load - create a new instance of "ScoreManager"
         if (!File.Exists(fileName))
             return new ScoreManager();
 
         // Otherwise we load the file
-
         using var reader = new StreamReader(new FileStream(fileName, FileMode.Open));
         var serilizer = new XmlSerializer(typeof(List<Score>));
 

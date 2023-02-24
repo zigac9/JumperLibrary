@@ -11,24 +11,14 @@ public sealed class Windowbox
     private readonly Game _game;
 
     private bool _initilized;
-
-    /// <summary>
-    ///     Black bars (letterboxes and pillarboxes).
-    /// </summary>
-    /// <remarks>
-    ///     1. Horizontal stripes above and below a video are called letterboxes.
-    ///     https://en.wikipedia.org/wiki/Letterboxing_(filming)
-    ///     2. Vertical black bars are called pillarboxes.
-    ///     https://en.wikipedia.org/wiki/Pillarbox
-    /// </remarks>
+    
+    // Black bars (letterboxes and pillarboxes).
     private Rectangle _renderScaleRectangle;
 
-    /// <summary>
-    ///     Graphical buffer used to draw graphics
-    ///     elements until we're ready to send it to the screen.
-    ///     While we draw on the buffer, nothing appears on the screen
-    ///     until we decide to draw the buffer to the screen.
-    /// </summary>
+    // Graphical buffer used to draw graphics
+    // elements until we're ready to send it to the screen.
+    // While we draw on the buffer, nothing appears on the screen
+    // until we decide to draw the buffer to the screen.
     private RenderTarget2D _renderTarget;
 
     public Windowbox(Game game, int designedResolutionWidth, int designedResolutionHeight)
@@ -133,15 +123,10 @@ public sealed class Windowbox
         spriteBatch.Draw(_renderTarget, _renderScaleRectangle, Color.White);
         spriteBatch.End();
     }
-
-    /// <summary>
-    ///     Provides black bars similar to your TV screen
-    ///     based on actual resolution vs resolution
-    ///     design (design resolution).
-    /// </summary>
-    /// <see>
-    ///     <cref>https://fr.wikipedia.org/wiki/Upscaling</cref>
-    /// </see>
+    
+    // Provides black bars similar to your TV screen
+    // based on actual resolution vs resolution
+    // design (design resolution).
     private void SetDesignResolution()
     {
         _renderTarget = new RenderTarget2D(_game.GraphicsDevice,

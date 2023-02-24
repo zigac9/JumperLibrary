@@ -11,22 +11,22 @@ public class MyInputField
     // Used to leave some space for text when drawing the rectangle for the Input Field
     private const int WidthPadding = 4;
     private const int HeightPadding = 4;
-    private readonly SpriteFont _font; // Font used for text rendering
-    private readonly Rectangle _rectangle; // The hitbox for the Input Field
+    private readonly SpriteFont _font;
+    private readonly Rectangle _rectangle;
     private readonly int _textLengthCap; // The maximum length the Input Field can store
     private readonly Texture2D _whiteTexture; // Used to  draw a rectangle for the Input Field
-    public readonly bool AllowSpaces; // Allow the use of the spacebar (default is false)
-    public Color BackgroundColor; // Input Field background color (Default is white)
-    public Color BorderColor; // Input Field border color (Default is black)
+    public readonly bool AllowSpaces;
+    public Color BackgroundColor;
+    public Color BorderColor;
     public readonly int BorderThickness;
-    private bool _finishedWriting; // Triggered when Input Field loses focus
-    private bool _hasFocus; // Does the Input Field have focus right now?
-    private KeyboardState _lastKeyboardState; // This is the keyboard state for last frame, used for keyboard events
+    private bool _finishedWriting;
+    private bool _hasFocus;
+    private KeyboardState _lastKeyboardState;
     private Vector2 _position; // Stores the position of Input Field
-    public readonly float Scale; // Scale of the Input Field (default is 1)
-    private int _startIndexToDraw; // Start drwaing from this index
+    public readonly float Scale;
+    private int _startIndexToDraw; // Start drawaing from this index
     public StringBuilder Text { get; set; } // Actual text for the Input Field
-    public Color TextColor; // Color of the main text (Default is black)
+    public Color TextColor;
 
     public MyInputField(GraphicsDevice device, SpriteFont font, Vector2 position, string hintText,
         int maxLength = int.MaxValue)
@@ -85,19 +85,6 @@ public class MyInputField
                         _startIndexToDraw = Math.Clamp(_startIndexToDraw - 1, 0, int.MaxValue);
                     }
                 }
-                // else if (key == Keys.Enter) // User wants to finish writing to the Input Field
-                // {
-                //     var prevHasFocus = _hasFocus;
-                //
-                //     _hasFocus = !_hasFocus;
-                //
-                //     BorderColor = Color.Green;
-                //
-                //     if (prevHasFocus != _hasFocus && !_hasFocus)
-                //     {
-                //         BorderColor = Color.Black;
-                //     }
-                // }
                 else if (_hasFocus && Text.Length < _textLengthCap) // If user can add more characters
                 {
                     if (key == Keys.Space && !AllowSpaces)

@@ -113,11 +113,6 @@ public class StaticEnemy
         }
     }
 
-    // private bool BulletCollision(Bullet bullet)
-    // {
-    //     return bullet.Position.Intersects(_position) || _position.Intersects(bullet.Position);
-    // }    
-    
     private bool BulletCollision(Bullet bullet)
     {
         var closest = new Vector2(

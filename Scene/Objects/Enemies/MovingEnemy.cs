@@ -95,13 +95,11 @@ public class MovingEnemy
 
     public void Move()
     {
-        //Debug.WriteLine("Speed:" + _speed);
         _position.X += (int)_speed.X;
         if (_position.X > 410)
             _speed.X *= -1;
         if (_position.X < 10)
             _speed.X *= -1;
-        // Debug.WriteLine("Speed po metodi:" + _speed);
     }
 
     public void Update(Bullet bullet, Bullet bulletEnemy, Sound sound, Player player,
@@ -109,7 +107,6 @@ public class MovingEnemy
     {
         if (Life > 0 && bullet.IsCheck && BulletCloseCollision(bullet) && Visible)
         {
-            //Debug.WriteLine(Life);
             if (!NotDie)
             {
                 switch (_position.X)
