@@ -41,9 +41,6 @@ public class Bullet
 
     public void Initialize()
     {
-        // int diameter = 20;
-        // int radius = diameter / 2;
-        // Rectangle circleRect = new Rectangle(200 - radius, 200 - radius, diameter, diameter);
         IsCheck = false;
         _position = new Rectangle(-50, -50, 20, 20);
     }
