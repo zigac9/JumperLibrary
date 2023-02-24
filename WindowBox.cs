@@ -1,55 +1,55 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace JumperLibrary;
+
 public sealed class Windowbox
 {
-    private readonly int designedResolutionWidth;
-    private readonly int designedResolutionHeight;
-    private readonly Microsoft.Xna.Framework.Game game;
-    private readonly Color clearColor;
+    private readonly Color _clearColor;
+    private readonly Game _game;
+
+    private bool _initilized;
 
     /// <summary>
-    /// Graphical buffer used to draw graphics
-    /// elements until we're ready to send it to the screen.
-    /// While we draw on the buffer, nothing appears on the screen
-    /// until we decide to draw the buffer to the screen.
-    /// </summary>
-    private RenderTarget2D _renderTarget;
-
-    /// <summary>
-    /// Black bars (letterboxes and pillarboxes).
+    ///     Black bars (letterboxes and pillarboxes).
     /// </summary>
     /// <remarks>
-    /// 1. Horizontal stripes above and below a video are called letterboxes.
-    ///    https://en.wikipedia.org/wiki/Letterboxing_(filming)
-    ///
-    /// 2. Vertical black bars are called pillarboxes.
-    ///    https://en.wikipedia.org/wiki/Pillarbox
+    ///     1. Horizontal stripes above and below a video are called letterboxes.
+    ///     https://en.wikipedia.org/wiki/Letterboxing_(filming)
+    ///     2. Vertical black bars are called pillarboxes.
+    ///     https://en.wikipedia.org/wiki/Pillarbox
     /// </remarks>
     private Rectangle _renderScaleRectangle;
 
-    private bool _initilized = false;
+    /// <summary>
+    ///     Graphical buffer used to draw graphics
+    ///     elements until we're ready to send it to the screen.
+    ///     While we draw on the buffer, nothing appears on the screen
+    ///     until we decide to draw the buffer to the screen.
+    /// </summary>
+    private RenderTarget2D _renderTarget;
 
-    public Windowbox(Microsoft.Xna.Framework.Game game, int designedResolutionWidth, int designedResolutionHeight)
+    public Windowbox(Game game, int designedResolutionWidth, int designedResolutionHeight)
     {
-        this.game = game;
-        this.designedResolutionWidth = designedResolutionWidth;
-        this.designedResolutionHeight = designedResolutionHeight;
+        _game = game;
+        DesignedResolutionWidth = designedResolutionWidth;
+        DesignedResolutionHeight = designedResolutionHeight;
 
-        clearColor = Color.Black;
+        _clearColor = Color.Black;
 
-        game.Window.ClientSizeChanged += (s, e) => SetDesignResolution();
+        game.Window.ClientSizeChanged += (_, _) => SetDesignResolution();
     }
 
-    private GameWindow Window => game.Window;
-    private float DesignedResolutionAspectRatio =>
-        designedResolutionWidth / (float)designedResolutionHeight;
+    private GameWindow Window => _game.Window;
 
-    public int DesignedResolutionWidth => designedResolutionWidth;
-    public int DesignedResolutionHeight => designedResolutionHeight;
+    private float DesignedResolutionAspectRatio =>
+        DesignedResolutionWidth / (float)DesignedResolutionHeight;
+
+    private int DesignedResolutionWidth { get; }
+
+    private int DesignedResolutionHeight { get; }
 
     public void Draw(
         SpriteBatch spriteBatch,
@@ -66,7 +66,7 @@ public sealed class Windowbox
         Draw(
             spriteBatch,
             renderAction,
-            clearColor,
+            _clearColor,
             sortMode,
             blendState,
             samplerState,
@@ -76,11 +76,22 @@ public sealed class Windowbox
             transformMatrix);
     }
 
-    public Point GetCorrectMousePos(MouseState mouseState) => ((mouseState.Position - _renderScaleRectangle.Location).ToVector2() / (_renderScaleRectangle.Size.ToVector2() / new Vector2(designedResolutionWidth, designedResolutionHeight))).ToPoint();
+    public Point GetCorrectMousePos(MouseState mouseState)
+    {
+        return ((mouseState.Position - _renderScaleRectangle.Location).ToVector2() /
+                (_renderScaleRectangle.Size.ToVector2() /
+                 new Vector2(DesignedResolutionWidth, DesignedResolutionHeight))).ToPoint();
+    }
 
-    public Rectangle GetScaledRect() => new Rectangle(Point.Zero, (_renderScaleRectangle.Size.ToVector2() / (_renderScaleRectangle.Size.ToVector2() / new Vector2(designedResolutionWidth, designedResolutionHeight))).ToPoint());
+    public Rectangle GetScaledRect()
+    {
+        return new Rectangle(Point.Zero,
+            (_renderScaleRectangle.Size.ToVector2() / (_renderScaleRectangle.Size.ToVector2() /
+                                                       new Vector2(DesignedResolutionWidth, DesignedResolutionHeight)))
+            .ToPoint());
+    }
 
-    public void Draw(
+    private void Draw(
         SpriteBatch spriteBatch,
         Action renderAction,
         Color clearColor,
@@ -100,8 +111,8 @@ public sealed class Windowbox
         }
 
         // Draw on the graphics pad.
-        game.GraphicsDevice.SetRenderTarget(_renderTarget);
-        game.GraphicsDevice.Clear(Color.CornflowerBlue);
+        _game.GraphicsDevice.SetRenderTarget(_renderTarget);
+        _game.GraphicsDevice.Clear(Color.CornflowerBlue);
 
         spriteBatch.Begin(
             sortMode,
@@ -116,29 +127,31 @@ public sealed class Windowbox
         spriteBatch.End();
 
         // Display the contents of the graphics buffer window-wide.
-        game.GraphicsDevice.SetRenderTarget(null);
-        game.GraphicsDevice.Clear(ClearOptions.Target, clearColor, 1.0f, 0);
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, samplerState: samplerState);
+        _game.GraphicsDevice.SetRenderTarget(null);
+        _game.GraphicsDevice.Clear(ClearOptions.Target, clearColor, 1.0f, 0);
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, samplerState);
         spriteBatch.Draw(_renderTarget, _renderScaleRectangle, Color.White);
         spriteBatch.End();
     }
 
-    public void SetDesignResolution()
+    /// <summary>
+    ///     Provides black bars similar to your TV screen
+    ///     based on actual resolution vs resolution
+    ///     design (design resolution).
+    /// </summary>
+    /// <see>
+    ///     <cref>https://fr.wikipedia.org/wiki/Upscaling</cref>
+    /// </see>
+    private void SetDesignResolution()
     {
-        _renderTarget = new RenderTarget2D(game.GraphicsDevice,
-                designedResolutionWidth, designedResolutionHeight,
-                false,
-                SurfaceFormat.Color, DepthFormat.None, 0,
-                RenderTargetUsage.DiscardContents);
+        _renderTarget = new RenderTarget2D(_game.GraphicsDevice,
+            DesignedResolutionWidth, DesignedResolutionHeight,
+            false,
+            SurfaceFormat.Color, DepthFormat.None, 0,
+            RenderTargetUsage.DiscardContents);
 
         _renderScaleRectangle = GetScaleRectangle();
 
-        /// <summary>
-        /// Provides black bars similar to your TV screen
-        /// based on actual resolution vs resolution
-        /// design (design resolution).
-        /// </summary>
-        /// <see cref="https://fr.wikipedia.org/wiki/Upscaling"/>
         Rectangle GetScaleRectangle()
         {
             var variance = 0.5;
