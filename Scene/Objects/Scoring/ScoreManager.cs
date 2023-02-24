@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -58,11 +59,19 @@ public class ScoreManager
     public static ScoreManager Load(string fileName)
     {
         // If there isn't a file to load - create a new instance of "ScoreManager"
-        if (!File.Exists(fileName))
+        var virusJumpDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VirusJump");
+        // Check if the VirusJump directory exists, and create it if it doesn't
+        if (!Directory.Exists(virusJumpDirectory))
+        {
+            Directory.CreateDirectory(virusJumpDirectory);
+        }
+        var filePath = Path.Combine(virusJumpDirectory, fileName);
+
+        if (!File.Exists(filePath))
             return new ScoreManager();
 
         // Otherwise we load the file
-        using var reader = new StreamReader(new FileStream(fileName, FileMode.Open));
+        using var reader = new StreamReader(new FileStream(filePath, FileMode.Open));
         var serilizer = new XmlSerializer(typeof(List<Score>));
 
         var scores = (List<Score>)serilizer.Deserialize(reader);
@@ -92,14 +101,15 @@ public class ScoreManager
             Highscores[4] = Scores[4].Value;
         else
             Highscores[4] = 0;
-
-        // Highscores = Scores.Take(5).ToList(); // Takes the first 5 elements
     }
 
     public static void Save(ScoreManager scoreManager, string fileName)
     {
+        var virusJumpDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VirusJump");
+        var filePath = Path.Combine(virusJumpDirectory, fileName);
+        
         // Overrides the file if it alreadt exists
-        using var writer = new StreamWriter(new FileStream(fileName, FileMode.Create));
+        using var writer = new StreamWriter(new FileStream(filePath, FileMode.Create));
         var serilizer = new XmlSerializer(typeof(List<Score>));
 
         serilizer.Serialize(writer, scoreManager.Scores);
