@@ -53,23 +53,25 @@ public class MyInputField
 
     public string HintText { get; set; }
 
-    public void Update(KeyboardState keyboardState, MouseState mouseState)
+    public void Update(KeyboardState keyboardState, MouseState mouseState, Point mousePos)
     {
-        switch (mouseState)
-        {
-            case { LeftButton: ButtonState.Pressed, X: > 100 and < 388, Y: > 358 and < 412 }:
-                _hasFocus = true;
-                BorderColor = Color.LightGreen;
-                BackgroundColor = Color.WhiteSmoke;
-                HintText = "Typing ...             ";
-                break;
-            case { LeftButton: ButtonState.Pressed }:
-                _hasFocus = false;
-                BorderColor = Color.Black;
-                BackgroundColor = Color.White;
-                HintText = "Enter your name ...    ";
-                break;
-        }
+       if (mouseState.LeftButton == ButtonState.Pressed)
+       {
+           if (mousePos.X > 100 && mousePos.X < 388 && mousePos.Y > 358 && mousePos.Y < 412)
+           {
+               _hasFocus = true;
+               BorderColor = Color.LightGreen;
+               BackgroundColor = Color.WhiteSmoke;
+               HintText = "Typing ...             ";
+           }
+           else
+           {
+               _hasFocus = false;
+               BorderColor = Color.Black;
+               BackgroundColor = Color.White;
+               HintText = "Enter your name ...    ";
+           } 
+       }
         
         // Keys pressed being recorded here
         foreach (var key in keyboardState.GetPressedKeys())
