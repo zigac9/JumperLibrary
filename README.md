@@ -19,7 +19,7 @@
 
 ### Links:
 - **Play Virus Jump on itch.io**: [Virus Jump](https://zigac24.itch.io/virus-jump)
-- **Virus Jump Library**: Use this library for the Virus Jump game. Get it here: [Virus Jump Library on GitHub](https://github.com/zigac9/VirusJump)
+- **Virus Jump Library**: Use this library for the Virus Jump game. Get the game here: [Virus Jump Library on GitHub](https://github.com/zigac9/VirusJump)
 
 Good luck and enjoy the game!
 
